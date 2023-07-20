@@ -13,11 +13,13 @@ Add deploy key to github repo.
 ### Create Python Environment
 
 ```bash
-sudo apt-get install python3.10 python3.10-venv
+sudo apt-get install python3.10 python3.10-venv sox
 
 python -m venv typemusic
 
 source typemusic/bin/activate
+
+pip install -r requirements.txt
 ```
 
 
