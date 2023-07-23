@@ -1,6 +1,5 @@
 import time
 import threading
-import platform
 import pygame
 from pynput import keyboard
 
@@ -14,51 +13,67 @@ def play_sound(note,octave):
     duration = 100  # milliseconds
     global channel
 
-    if platform.system() == 'Windows':
-        import winsound
-        #winsound.Beep(frequency, duration)
-    elif platform.system() == 'Linux':
-        import subprocess
-        #subprocess.call(['play', '-n', 'synth', str(duration/1000), 'sin', str(frequency)])
-
-        try:
-            #pygame.mixer.music.load("samples/" + note + str(octave) + "v9.wav")
-            #pygame.mixer.music.play()
-            pygame.mixer.Channel(channel).play(pygame.mixer.Sound("samples/" + note + str(octave) + ".mp3"))
-            channel += 1
-            if (channel >= channels):
-                channel = 1
-        except:
-            print('Sample ' + note + str(octave) + "v9.wav not found")
+    import subprocess
+    try:
+        pygame.mixer.Channel(channel).play(pygame.mixer.Sound("samples/" + note + str(octave) + ".mp3"))
+        channel += 1
+        if (channel >= channels):
+            channel = 1
+    except:
+        print('Sample ' + note + str(octave) + "v9.wav not found")
 
 
 def on_press(key):
+
+    octave = 4
+
+    sound_keys = {
+        "q": ['a',octave - 1],
+        "w": ['a-',octave - 1],
+        "e": ['b',octave - 1],
+        "r": ['c',octave - 1],
+        "t": ['c-',octave - 1],
+        "z": ['d',octave - 1],
+        "u": ['d-',octave - 1],
+        "i": ['e',octave - 1],
+        "o": ['f',octave - 1],
+        "p": ['f-',octave - 1],
+        "ü": ['g',octave - 1],
+        "+": ['g-',octave - 1],
+        "a": ['a',octave],
+        "s": ['a-',octave],
+        "d": ['b',octave],
+        "f": ['c',octave],
+        "g": ['c-',octave],
+        "h": ['d',octave],
+        "j": ['d-',octave],
+        "k": ['e',octave],
+        "l": ['f',octave],
+        "ö": ['f-',octave],
+        "ä": ['g',octave],
+        "#": ['g-',octave],
+        "<": ['a',octave + 1],
+        "y": ['a-',octave + 1],
+        "x": ['b',octave + 1],
+        "c": ['c',octave + 1],
+        "v": ['c-',octave + 1],
+        "b": ['d',octave + 1],
+        "n": ['d-',octave + 1],
+        "m": ['e',octave + 1],
+        ",": ['f',octave + 1],
+        ".": ['f-',octave + 1],
+        "-": ['g',octave + 1]#,
+        #"-": ['g-',ocatave + 1],
+    }
+
     try:
-        if key.char == 'a':
-            play_sound('c',4)
-        elif key.char == 's':
-            play_sound('c-',4)
-        elif key.char == 'd':
-            play_sound('d',4)
-        elif key.char == 'f':
-            play_sound('d-',4)
-        elif key.char == 'g':
-            play_sound('e',4)
-        elif key.char == 'h':
-            play_sound('f',4)
-        elif key.char == 'j':
-            play_sound('f-',4)
-        elif key.char == 'k':
-            play_sound('g',4)
-        elif key.char == 'l':
-            play_sound('g-',4)
-        elif key.char == 'ö':
-            play_sound('a',5)
-        elif key.char == 'ä':
-            play_sound('a-',5)
-        elif key.char == '#':
-            play_sound('b',5)
+
+        sound_key = sound_keys[key.char]
+
+        play_sound(sound_key[0],sound_key[1])
+
     except AttributeError:
+
         print('special key {0} pressed'.format(key))
 
 def on_release(key):
